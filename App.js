@@ -1,20 +1,72 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import 'react-native-gesture-handler';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import HomeScreen from './screens/HomeScreen';
+import LoginScreen from './screens/LoginScreen';
+import SignUpScreen from './screens/SignUpScreen';
+import ModeSelectScreen from './screens/ModeSelectScreen';
+import HowToPlayScreen from './screens/HowToPlayScreen';
+import LocalPlayScreen from './screens/LocalPlayScreen';
+import RulesScreen from './screens/RulesScreen';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="Home"
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: '#050522',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+          contentStyle: {
+            backgroundColor: '#050522',
+          },
+        }}
+      >
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ title: 'Login' }}
+        />
+        <Stack.Screen
+          name="SignUp"
+          component={SignUpScreen}
+          options={{ title: 'Sign Up' }}
+        />
+        <Stack.Screen
+          name="ModeSelect"
+          component={ModeSelectScreen}
+          options={{ title: 'Choose Mode', headerBackVisible: false }}
+        />
+        <Stack.Screen
+          name="HowToPlay"
+          component={HowToPlayScreen}
+          options={{ title: 'How To Play' }}
+        />
+        <Stack.Screen
+          name="LocalPlay"
+          component={LocalPlayScreen}
+          options={{ title: 'Local Play' }}
+        />
+        <Stack.Screen
+          name="Rules"
+          component={RulesScreen}
+          options={{ title: 'Edit Rules' }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
