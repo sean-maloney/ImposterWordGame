@@ -1,49 +1,37 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 
-export default function RulesScreen() {
-  const [maxImposters, setMaxImposters] = useState(1);
-  const [rounds, setRounds] = useState(3);
-  const [imposterCanGoFirst, setImposterCanGoFirst] = useState(true);
-  const [impostersKnowEachOther, setImpostersKnowEachOther] = useState(false);
-  const [hintWordEnabled, setHintWordEnabled] = useState(true);
-  const [discussionTimer, setDiscussionTimer] = useState(60);
-  const [repeatCluesAllowed, setRepeatCluesAllowed] = useState(false);
+export default function RulesScreen({ navigation, route }) {
+  const currentRules = route.params?.rules || {
+    maxImposters: 1,
+    rounds: 3,
+    imposterCanGoFirst: true,
+    impostersKnowEachOther: false,
+    hintWordEnabled: true,
+    discussionTimer: 60,
+    repeatCluesAllowed: false,
+  };
 
-  function toggleValue(value, setValue) {
-    setValue(!value);
-  }
+  const [maxImposters, setMaxImposters] = useState(currentRules.maxImposters);
+  const [rounds, setRounds] = useState(currentRules.rounds);
+  const [imposterCanGoFirst, setImposterCanGoFirst] = useState(currentRules.imposterCanGoFirst);
+  const [impostersKnowEachOther, setImpostersKnowEachOther] = useState(currentRules.impostersKnowEachOther);
+  const [hintWordEnabled, setHintWordEnabled] = useState(currentRules.hintWordEnabled);
+  const [discussionTimer, setDiscussionTimer] = useState(currentRules.discussionTimer);
+  const [repeatCluesAllowed, setRepeatCluesAllowed] = useState(currentRules.repeatCluesAllowed);
 
-  function increaseMaxImposters() {
-    if (maxImposters < 6) {
-      setMaxImposters(maxImposters + 1);
-    }
-  }
-
-  function decreaseMaxImposters() {
-    if (maxImposters > 0) {
-      setMaxImposters(maxImposters - 1);
-    }
-  }
-
-  function increaseRounds() {
-    setRounds(rounds + 1);
-  }
-
-  function decreaseRounds() {
-    if (rounds > 1) {
-      setRounds(rounds - 1);
-    }
-  }
-
-  function increaseTimer() {
-    setDiscussionTimer(discussionTimer + 15);
-  }
-
-  function decreaseTimer() {
-    if (discussionTimer > 15) {
-      setDiscussionTimer(discussionTimer - 15);
-    }
+  function saveRules() {
+    navigation.navigate('LocalPlay', {
+      updatedRules: {
+        maxImposters,
+        rounds,
+        imposterCanGoFirst,
+        impostersKnowEachOther,
+        hintWordEnabled,
+        discussionTimer,
+        repeatCluesAllowed,
+      },
+    });
   }
 
   return (
@@ -53,31 +41,28 @@ export default function RulesScreen() {
       <View style={styles.ruleBox}>
         <Text style={styles.ruleLabel}>Maximum Number of Imposters</Text>
         <View style={styles.numberRow}>
-          <TouchableOpacity style={styles.smallButton} onPress={decreaseMaxImposters}>
+          <TouchableOpacity style={styles.smallButton} onPress={() => maxImposters > 0 && setMaxImposters(maxImposters - 1)}>
             <Text style={styles.smallButtonText}>-</Text>
           </TouchableOpacity>
 
           <Text style={styles.numberText}>{maxImposters}</Text>
 
-          <TouchableOpacity style={styles.smallButton} onPress={increaseMaxImposters}>
+          <TouchableOpacity style={styles.smallButton} onPress={() => maxImposters < 6 && setMaxImposters(maxImposters + 1)}>
             <Text style={styles.smallButtonText}>+</Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.helperText}>
-          The game can randomly choose up to this number.
-        </Text>
       </View>
 
       <View style={styles.ruleBox}>
         <Text style={styles.ruleLabel}>Rounds</Text>
         <View style={styles.numberRow}>
-          <TouchableOpacity style={styles.smallButton} onPress={decreaseRounds}>
+          <TouchableOpacity style={styles.smallButton} onPress={() => rounds > 1 && setRounds(rounds - 1)}>
             <Text style={styles.smallButtonText}>-</Text>
           </TouchableOpacity>
 
           <Text style={styles.numberText}>{rounds}</Text>
 
-          <TouchableOpacity style={styles.smallButton} onPress={increaseRounds}>
+          <TouchableOpacity style={styles.smallButton} onPress={() => setRounds(rounds + 1)}>
             <Text style={styles.smallButtonText}>+</Text>
           </TouchableOpacity>
         </View>
@@ -87,20 +72,14 @@ export default function RulesScreen() {
         <Text style={styles.ruleLabel}>Imposter Can Go First</Text>
         <View style={styles.toggleRow}>
           <TouchableOpacity
-            style={[
-              styles.toggleButton,
-              imposterCanGoFirst && styles.selectedToggle,
-            ]}
+            style={[styles.toggleButton, imposterCanGoFirst && styles.selectedToggle]}
             onPress={() => setImposterCanGoFirst(true)}
           >
             <Text style={styles.toggleText}>Yes</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[
-              styles.toggleButton,
-              !imposterCanGoFirst && styles.selectedToggle,
-            ]}
+            style={[styles.toggleButton, !imposterCanGoFirst && styles.selectedToggle]}
             onPress={() => setImposterCanGoFirst(false)}
           >
             <Text style={styles.toggleText}>No</Text>
@@ -112,20 +91,14 @@ export default function RulesScreen() {
         <Text style={styles.ruleLabel}>Imposters Know Each Other</Text>
         <View style={styles.toggleRow}>
           <TouchableOpacity
-            style={[
-              styles.toggleButton,
-              impostersKnowEachOther && styles.selectedToggle,
-            ]}
+            style={[styles.toggleButton, impostersKnowEachOther && styles.selectedToggle]}
             onPress={() => setImpostersKnowEachOther(true)}
           >
             <Text style={styles.toggleText}>Yes</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[
-              styles.toggleButton,
-              !impostersKnowEachOther && styles.selectedToggle,
-            ]}
+            style={[styles.toggleButton, !impostersKnowEachOther && styles.selectedToggle]}
             onPress={() => setImpostersKnowEachOther(false)}
           >
             <Text style={styles.toggleText}>No</Text>
@@ -137,20 +110,14 @@ export default function RulesScreen() {
         <Text style={styles.ruleLabel}>Hint Word for Imposter</Text>
         <View style={styles.toggleRow}>
           <TouchableOpacity
-            style={[
-              styles.toggleButton,
-              hintWordEnabled && styles.selectedToggle,
-            ]}
+            style={[styles.toggleButton, hintWordEnabled && styles.selectedToggle]}
             onPress={() => setHintWordEnabled(true)}
           >
             <Text style={styles.toggleText}>Yes</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[
-              styles.toggleButton,
-              !hintWordEnabled && styles.selectedToggle,
-            ]}
+            style={[styles.toggleButton, !hintWordEnabled && styles.selectedToggle]}
             onPress={() => setHintWordEnabled(false)}
           >
             <Text style={styles.toggleText}>No</Text>
@@ -161,13 +128,13 @@ export default function RulesScreen() {
       <View style={styles.ruleBox}>
         <Text style={styles.ruleLabel}>Discussion Timer (seconds)</Text>
         <View style={styles.numberRow}>
-          <TouchableOpacity style={styles.smallButton} onPress={decreaseTimer}>
+          <TouchableOpacity style={styles.smallButton} onPress={() => discussionTimer > 15 && setDiscussionTimer(discussionTimer - 15)}>
             <Text style={styles.smallButtonText}>-</Text>
           </TouchableOpacity>
 
           <Text style={styles.numberText}>{discussionTimer}</Text>
 
-          <TouchableOpacity style={styles.smallButton} onPress={increaseTimer}>
+          <TouchableOpacity style={styles.smallButton} onPress={() => setDiscussionTimer(discussionTimer + 15)}>
             <Text style={styles.smallButtonText}>+</Text>
           </TouchableOpacity>
         </View>
@@ -177,26 +144,24 @@ export default function RulesScreen() {
         <Text style={styles.ruleLabel}>Allow Repeated Clues</Text>
         <View style={styles.toggleRow}>
           <TouchableOpacity
-            style={[
-              styles.toggleButton,
-              repeatCluesAllowed && styles.selectedToggle,
-            ]}
+            style={[styles.toggleButton, repeatCluesAllowed && styles.selectedToggle]}
             onPress={() => setRepeatCluesAllowed(true)}
           >
             <Text style={styles.toggleText}>Yes</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[
-              styles.toggleButton,
-              !repeatCluesAllowed && styles.selectedToggle,
-            ]}
+            style={[styles.toggleButton, !repeatCluesAllowed && styles.selectedToggle]}
             onPress={() => setRepeatCluesAllowed(false)}
           >
             <Text style={styles.toggleText}>No</Text>
           </TouchableOpacity>
         </View>
       </View>
+
+      <TouchableOpacity style={styles.saveButton} onPress={saveRules}>
+        <Text style={styles.saveButtonText}>Save Rules</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 }
@@ -226,11 +191,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 14,
-  },
-  helperText: {
-    color: '#bfbfbf',
-    fontSize: 13,
-    marginTop: 10,
   },
   numberRow: {
     flexDirection: 'row',
@@ -278,6 +238,19 @@ const styles = StyleSheet.create({
   toggleText: {
     color: '#ffffff',
     fontSize: 16,
+    fontWeight: 'bold',
+  },
+  saveButton: {
+    backgroundColor: '#5b1782',
+    paddingVertical: 18,
+    borderRadius: 25,
+    alignItems: 'center',
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  saveButtonText: {
+    color: '#ffffff',
+    fontSize: 18,
     fontWeight: 'bold',
   },
 });

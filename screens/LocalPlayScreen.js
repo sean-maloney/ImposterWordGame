@@ -1,16 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 
-export default function LocalPlayScreen({ navigation }) {
+export default function LocalPlayScreen({ navigation, route }) {
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [rules, setRules] = useState({
+    maxImposters: 1,
+    rounds: 3,
+    imposterCanGoFirst: true,
+    impostersKnowEachOther: false,
+    hintWordEnabled: true,
+    discussionTimer: 60,
+    repeatCluesAllowed: false,
+  });
 
   const categories = ['Animals', 'Food', 'Movies', 'Countries', 'Random'];
 
+  useEffect(() => {
+    if (route.params && route.params.updatedRules) {
+      setRules(route.params.updatedRules);
+    }
+  }, [route.params]);
+
   function toggleCategory(category) {
     if (selectedCategories.includes(category)) {
-      setSelectedCategories(
-        selectedCategories.filter((item) => item !== category)
-      );
+      setSelectedCategories(selectedCategories.filter((item) => item !== category));
     } else {
       setSelectedCategories([...selectedCategories, category]);
     }
@@ -22,16 +35,17 @@ export default function LocalPlayScreen({ navigation }) {
       return;
     }
 
-    Alert.alert('Selected Categories', selectedCategories.join(', '));
+    navigation.navigate('PlayerSetup', {
+      selectedCategories: selectedCategories,
+      rules: rules,
+    });
   }
 
   return (
     <View style={styles.container}>
       <View>
         <Text style={styles.title}>Choose Word Categories</Text>
-        <Text style={styles.subtitle}>
-          Tap categories to include or remove them
-        </Text>
+        <Text style={styles.subtitle}>Tap categories to include or remove them</Text>
       </View>
 
       <View style={styles.categoryContainer}>
@@ -41,10 +55,7 @@ export default function LocalPlayScreen({ navigation }) {
           return (
             <TouchableOpacity
               key={category}
-              style={[
-                styles.categoryButton,
-                isSelected && styles.selectedCategoryButton,
-              ]}
+              style={[styles.categoryButton, isSelected && styles.selectedCategoryButton]}
               onPress={() => toggleCategory(category)}
             >
               <Text style={styles.categoryText}>{category}</Text>
@@ -60,10 +71,12 @@ export default function LocalPlayScreen({ navigation }) {
 
         <TouchableOpacity
           style={styles.rulesButton}
-          onPress={() => navigation.navigate('Rules')}
+          onPress={() => navigation.navigate('Rules', { rules: rules })}
         >
           <Text style={styles.rulesButtonText}>Edit Rules</Text>
         </TouchableOpacity>
+
+        <Text style={styles.roundText}>Rounds selected: {rules.rounds}</Text>
       </View>
     </View>
   );
@@ -138,5 +151,11 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  roundText: {
+    color: '#d8d8d8',
+    textAlign: 'center',
+    marginTop: 14,
+    fontSize: 15,
   },
 });
