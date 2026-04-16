@@ -6,6 +6,7 @@ export default function MultiplayerLobbyScreen({ navigation, route }) {
   const { code, playerName, isHost } = route.params;
   const [players, setPlayers] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [hasNavigated, setHasNavigated] = useState(false);
 
   useEffect(() => {
     fetchRoom();
@@ -18,7 +19,8 @@ export default function MultiplayerLobbyScreen({ navigation, route }) {
       const res = await fetch(`${API_URL}/room/${code}`);
       const data = await res.json();
       setPlayers(data.players);
-      if (!isHost && data.gameData) {
+      if (!isHost && data.gameData && !hasNavigated) {
+        setHasNavigated(true);
         navigation.navigate('OnlineReveal', {
           code,
           playerName,
