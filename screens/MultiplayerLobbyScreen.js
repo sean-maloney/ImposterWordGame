@@ -12,16 +12,18 @@ export default function MultiplayerLobbyScreen({ navigation, route }) {
     fetchRoom();
     const interval = setInterval(fetchRoom, 2000);
     return () => clearInterval(interval);
-  }, []);
+  }, [hasNavigated]);
 
   async function fetchRoom() {
+    if (hasNavigated) return;
+    
     try {
       const res = await fetch(`${API_URL}/room/${code}`);
       const data = await res.json();
       setPlayers(data.players);
-      if (!isHost && data.gameData && !hasNavigated) {
+      if (!isHost && data.gameData) {
         setHasNavigated(true);
-        navigation.navigate('OnlineReveal', {
+        navigation.replace('OnlineReveal', {
           code,
           playerName,
           gameData: data.gameData,
