@@ -19,7 +19,7 @@ export default function MultiplayerLobbyScreen({ navigation, route }) {
       const data = await res.json();
       setPlayers(data.players);
       if (!isHost && data.gameData) {
-        navigation.navigate('MultiplayerReveal', {
+        navigation.navigate('OnlineReveal', {
           code,
           playerName,
           gameData: data.gameData,
@@ -30,15 +30,15 @@ export default function MultiplayerLobbyScreen({ navigation, route }) {
   }
 
   async function handleStart() {
-    if (players.length < 3) {
-      Alert.alert('Not Enough Players', 'You need at least 3 players to start.');
+    if (players.length < 2) {
+      Alert.alert('Not Enough Players', 'You need at least 2 players to start.');
       return;
     }
     setLoading(true);
     try {
       const res = await fetch(`${API_URL}/room/${code}/start`, { method: 'POST' });
       const gameData = await res.json();
-      navigation.navigate('MultiplayerReveal', { code, playerName, gameData, players });
+      navigation.navigate('OnlineReveal', { code, playerName, gameData, players });
     } catch {
       Alert.alert('Error', 'Could not start game.');
     } finally {

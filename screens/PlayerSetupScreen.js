@@ -13,7 +13,7 @@ export default function PlayerSetupScreen({ navigation, route }) {
     repeatCluesAllowed: false,
   };
 
-  const [players, setPlayers] = useState(['Player 1', 'Player 2', 'Player 3']);
+  const [players, setPlayers] = useState(['Player 1', 'Player 2']);
 
   function updatePlayerName(text, index) {
     const updatedPlayers = [...players];
@@ -28,7 +28,7 @@ export default function PlayerSetupScreen({ navigation, route }) {
   }
 
   function removePlayer() {
-    if (players.length > 3) {
+    if (players.length > 2) {
       setPlayers(players.slice(0, players.length - 1));
     }
   }
@@ -51,7 +51,7 @@ export default function PlayerSetupScreen({ navigation, route }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Enter Player Names</Text>
-      <Text style={styles.subtitle}>You need at least 3 players</Text>
+      <Text style={styles.subtitle}>You need at least 2 players</Text>
 
       {players.map((player, index) => (
         <TextInput
