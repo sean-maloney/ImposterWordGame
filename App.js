@@ -14,6 +14,11 @@ import PlayerSetupScreen from './screens/PlayerSetupScreen';
 import RevealScreen from './screens/RevealScreen';
 import GameScreen from './screens/GameScreen';
 import FinalRevealScreen from './screens/FinalRevealScreen';
+import OnlinePlayScreen from './screens/OnlinePlayScreen';
+import MultiplayerLobbyScreen from './screens/MultiplayerLobbyScreen';
+import MultiplayerRevealScreen from './screens/MultiplayerRevealScreen';
+import MultiplayerGameScreen from './screens/MultiplayerGameScreen';
+import ScoreboardScreen from './screens/ScoreboardScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -46,6 +51,11 @@ export default function App() {
         <Stack.Screen name="Reveal" component={RevealScreen} options={{ title: 'Reveal', headerBackVisible: false }} />
         <Stack.Screen name="Game" component={GameScreen} options={{ title: 'Game', headerBackVisible: false }} />
         <Stack.Screen name="FinalReveal" component={FinalRevealScreen} options={{ title: 'Reveal', headerBackVisible: false }} />
+        <Stack.Screen name="OnlinePlay" component={OnlinePlayScreen} options={{ title: 'Play Online' }} />
+        <Stack.Screen name="MultiplayerLobby" component={MultiplayerLobbyScreen} options={{ title: 'Lobby', headerBackVisible: false }} />
+        <Stack.Screen name="MultiplayerReveal" component={MultiplayerRevealScreen} options={{ title: 'Reveal', headerBackVisible: false }} />
+        <Stack.Screen name="MultiplayerGame" component={MultiplayerGameScreen} options={{ title: 'Game', headerBackVisible: false }} />
+        <Stack.Screen name="Scoreboard" component={ScoreboardScreen} options={{ title: 'Scoreboard', headerBackVisible: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

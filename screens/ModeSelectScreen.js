@@ -8,7 +8,7 @@ export default function ModeSelectScreen({ navigation }) {
         <Text style={styles.title}>Choose Game Mode</Text>
         <Text style={styles.subtitle}>Pick how you want to play</Text>
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('OnlinePlay')}>
           <Text style={styles.buttonText}>Play Online</Text>
         </TouchableOpacity>
 
